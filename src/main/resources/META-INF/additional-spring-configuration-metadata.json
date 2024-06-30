@@ -1,0 +1,23 @@
+{
+  "properties": [
+    {
+      "name": "greenspaces.resource-server-details.keySetUri",
+      "type": "java.lang.String",
+      "description": "Jason Web Token key set uri of an authorization server"
+    },
+    {
+      "name": "greenspaces.resource-server-details.clientID",
+      "type": "java.lang.String",
+      "description": "Resource server client id."
+    },
+    {
+      "name": "greenspaces.resource-server-details.secret",
+      "type": "java.lang.String",
+      "description": "Resource server's secret."
+    },
+    {
+      "name": "greenspaces.resource-server-details.introspectionUri",
+      "type": "java.lang.String",
+      "description": "Uri for the verifying an access token from the authorization server"
+    }
+  ] }
