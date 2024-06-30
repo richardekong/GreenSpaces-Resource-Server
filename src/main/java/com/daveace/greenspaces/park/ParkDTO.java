@@ -1,6 +1,9 @@
 package com.daveace.greenspaces.park;
 
+import com.daveace.greenspaces.facility.Facility;
+
 import java.time.Instant;
+import java.util.List;
 
 public class ParkDTO {
 
