@@ -6,7 +6,9 @@ import jakarta.persistence.*;
 import lombok.*;
 import lombok.experimental.Accessors;
 
+import java.time.Instant;
 import java.util.Objects;
+import java.util.UUID;
 
 
 @NoArgsConstructor
@@ -22,11 +24,20 @@ public class Facility {
     private String id;
     private String name;
     private String description;
+    private final Instant createdAt = Instant.now();
+    @Column(name="modified_at")
+    private Instant modifiedAt;
 
     @ManyToOne
     @JoinColumn(name="park_id")
     @JsonBackReference
     private Park park;
+
+    @PrePersist
+    public void init(){
+        id = UUID.randomUUID().toString();
+        modifiedAt = Instant.now();
+    }
 
     public FacilityDTO toDTO(){
         return new FacilityDTO(this);

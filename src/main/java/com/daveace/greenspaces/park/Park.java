@@ -1,5 +1,6 @@
 package com.daveace.greenspaces.park;
 
+import com.daveace.greenspaces.address.Address;
 import com.daveace.greenspaces.facility.Facility;
 import com.fasterxml.jackson.annotation.JsonManagedReference;
 import jakarta.persistence.*;
@@ -22,19 +23,24 @@ public class Park {
     private String id;
     private String name;
     private String description;
+
     @Column(name="image_url")
     private String imageURL;
+
     @OneToMany(mappedBy = "park", fetch = FetchType.EAGER, cascade = CascadeType.REFRESH)
     @JsonManagedReference
     private List<Facility> facilities;
     private Address address;
-    private Instant createAt;
+    private final Instant createAt = Instant.now();
+
+    @Column(name="modified_at")
+    private Instant modifiedAt;
 
 
     @PrePersist
     public void init(){
         id = UUID.randomUUID().toString();
-        createAt = Instant.now();
+        modifiedAt = Instant.now();
     }
 
     public void addFacilities(Collection<Facility>facilities){

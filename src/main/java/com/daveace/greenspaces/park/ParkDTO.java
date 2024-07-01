@@ -1,5 +1,6 @@
 package com.daveace.greenspaces.park;
 
+import com.daveace.greenspaces.address.Address;
 import com.daveace.greenspaces.facility.Facility;
 
 import java.time.Instant;
