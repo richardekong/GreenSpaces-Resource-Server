@@ -1,10 +1,9 @@
 package com.daveace.greenspaces.address;
 
 
-import jakarta.persistence.GeneratedValue;
-import jakarta.persistence.GenerationType;
-import jakarta.persistence.Id;
-import jakarta.persistence.PrePersist;
+import com.daveace.greenspaces.location.Location;
+import com.fasterxml.jackson.annotation.JsonManagedReference;
+import jakarta.persistence.*;
 import lombok.*;
 import lombok.experimental.Accessors;
 
@@ -18,27 +17,32 @@ import java.util.UUID;
 @Accessors(chain = true)
 @Setter
 @Getter
+@Entity
+@Table(name = "addresses")
 public class Address {
 
     @Id
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
     private String id;
 
     private String description;
     private String postcode;
     private String city;
     private String country;
+
+    @OneToOne(cascade = CascadeType.ALL)
+    @JoinColumn(name = "location_id", referencedColumnName = "id")
+    @JsonManagedReference
     private Location location;
     private final Instant createdAt = Instant.now();
     private Instant modifiedAt;
 
     @PrePersist
-    public void init(){
+    public void init() {
         id = UUID.randomUUID().toString();
-        modifiedAt=Instant.now();
+        modifiedAt = Instant.now();
     }
 
-    public AddressDTO toDTO(){
+    public AddressDTO toDTO() {
         return new AddressDTO(this);
     }
 

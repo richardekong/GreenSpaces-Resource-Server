@@ -1,5 +1,7 @@
 package com.daveace.greenspaces.address;
 
+import com.daveace.greenspaces.location.Location;
+
 public class AddressDTO {
 
     private String id;
