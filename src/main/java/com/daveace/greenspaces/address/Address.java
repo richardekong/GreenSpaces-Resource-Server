@@ -37,8 +37,13 @@ public class Address {
     private Instant modifiedAt;
 
     @PrePersist
-    public void init() {
+    public void doBeforeSaving() {
         id = UUID.randomUUID().toString();
+        modifiedAt = Instant.now();
+    }
+
+    @PreUpdate
+    public void doBeforeUpdating(){
         modifiedAt = Instant.now();
     }
 

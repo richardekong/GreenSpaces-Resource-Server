@@ -26,7 +26,7 @@ public class Facility {
     private String description;
     private final Instant createdAt = Instant.now();
     @Column(name="modified_at")
-    private Instant modifiedAt;
+    private Instant modifiedAt = Instant.now();
 
     @ManyToOne
     @JoinColumn(name="park_id")
@@ -36,6 +36,11 @@ public class Facility {
     @PrePersist
     public void init(){
         id = UUID.randomUUID().toString();
+        modifiedAt = Instant.now();
+    }
+
+    @PreUpdate
+    public void doBeforeUpdating(){
         modifiedAt = Instant.now();
     }
 

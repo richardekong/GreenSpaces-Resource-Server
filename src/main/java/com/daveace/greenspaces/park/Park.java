@@ -43,6 +43,11 @@ public class Park {
         modifiedAt = Instant.now();
     }
 
+    @PreUpdate
+    public void doBeforeUpdating(){
+        modifiedAt=Instant.now();
+    }
+
     public void addFacilities(Collection<Facility>facilities){
         if (this.facilities==null){
             this.facilities=new ArrayList<>();
