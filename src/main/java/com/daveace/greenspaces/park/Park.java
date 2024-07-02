@@ -25,6 +25,8 @@ import static com.daveace.greenspaces.util.Regexp.LETTER_REGEX;
 @Accessors(chain = true)
 @Getter
 @Setter
+@Entity
+@Table(name="parks")
 public class Park {
 
     @Id
