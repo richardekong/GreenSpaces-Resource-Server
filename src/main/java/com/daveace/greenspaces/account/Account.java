@@ -1,13 +1,21 @@
 package com.daveace.greenspaces.account;
 
 
+import com.daveace.greenspaces.util.Constant;
+import com.daveace.greenspaces.util.Regexp;
 import jakarta.persistence.*;
 import jakarta.validation.constraints.Email;
+import jakarta.validation.constraints.Pattern;
 import lombok.*;
 import lombok.experimental.Accessors;
 
 import java.time.Instant;
 import java.util.Objects;
+
+import static com.daveace.greenspaces.util.Constant.INVALID_IMAGE_URL;
+import static com.daveace.greenspaces.util.Constant.INVALID_NAME;
+import static com.daveace.greenspaces.util.Regexp.ALPHA_NUM_REGEX;
+import static com.daveace.greenspaces.util.Regexp.LETTER_REGEX;
 
 @NoArgsConstructor
 @AllArgsConstructor
@@ -21,11 +29,20 @@ public class Account {
 
     @Id
     private String id;
+
+    @Pattern(regexp = LETTER_REGEX, message = INVALID_NAME)
     private String firstName;
+
+    @Pattern(regexp = LETTER_REGEX, message = INVALID_NAME)
     private String lastName;
+
+    @Pattern(regexp = ALPHA_NUM_REGEX, message = "Username must contain alphanumeric characters")
     private String username;
-    @Email
+
+    @Email(message = "Invalid email")
     private String email;
+
+    @Pattern(regexp = Regexp.IMAGE_URL_REGEX, message = INVALID_IMAGE_URL)
     private String imageURL;
     private final Instant joinOn = Instant.now();
     private Instant modifiedAt;

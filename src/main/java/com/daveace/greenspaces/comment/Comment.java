@@ -1,13 +1,21 @@
 package com.daveace.greenspaces.comment;
 
 import com.daveace.greenspaces.park.Park;
+import com.daveace.greenspaces.util.Constant;
 import jakarta.persistence.*;
+import jakarta.validation.constraints.Min;
+import jakarta.validation.constraints.NotBlank;
+import jakarta.validation.constraints.NotNull;
+import jakarta.validation.constraints.Pattern;
 import lombok.*;
 import lombok.experimental.Accessors;
 
 import java.time.Instant;
 import java.util.Objects;
 import java.util.UUID;
+
+import static com.daveace.greenspaces.util.Constant.INVALID_AUTHOR;
+import static com.daveace.greenspaces.util.Regexp.LETTER_REGEX;
 
 
 @NoArgsConstructor
@@ -22,24 +30,39 @@ public class Comment {
 
     @Id
     private String id;
+
+    @Pattern(regexp = LETTER_REGEX, message = INVALID_AUTHOR)
+    @NotBlank
     private String author;
+
+    @NotBlank
     private String text;
+
+    @Min(value=0)
     private int views;
+
+    @Min(value=0)
     private int likes;
+
+    @Min(value=0)
     private int dislikes;
+
+    @Min(value=0)
     private int ratings;
+
+    @NotNull
     private Park park;
+
     private final Instant postedOn = Instant.now();
     private Instant modifiedAt;
 
     @PrePersist
-    public void doBeforePersisting(){
+    public void onSave(){
         id = UUID.randomUUID().toString();
-        modifiedAt = Instant.now();
     }
 
     @PreUpdate
-    public void doBeforeUpdate(){
+    public void onUpdate(){
         modifiedAt = Instant.now();
     }
 

@@ -4,11 +4,20 @@ import com.daveace.greenspaces.address.Address;
 import com.daveace.greenspaces.facility.Facility;
 import com.fasterxml.jackson.annotation.JsonManagedReference;
 import jakarta.persistence.*;
+import jakarta.validation.constraints.NotBlank;
+import jakarta.validation.constraints.NotNull;
+import jakarta.validation.constraints.Pattern;
+import jakarta.validation.constraints.Size;
 import lombok.*;
 import lombok.experimental.Accessors;
 
 import java.time.Instant;
 import java.util.*;
+
+import static com.daveace.greenspaces.util.Constant.INVALID_IMAGE_URL;
+import static com.daveace.greenspaces.util.Constant.INVALID_NAME;
+import static com.daveace.greenspaces.util.Regexp.IMAGE_URL_REGEX;
+import static com.daveace.greenspaces.util.Regexp.LETTER_REGEX;
 
 @AllArgsConstructor
 @NoArgsConstructor
@@ -19,18 +28,26 @@ import java.util.*;
 public class Park {
 
     @Id
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
     private String id;
+
+    @Pattern(regexp=LETTER_REGEX, message=INVALID_NAME)
     private String name;
+
+    @NotBlank
     private String description;
 
+    @Pattern(regexp=IMAGE_URL_REGEX, message=INVALID_IMAGE_URL)
     @Column(name="image_url")
     private String imageURL;
 
     @OneToMany(mappedBy = "park", fetch = FetchType.EAGER, cascade = CascadeType.REFRESH)
     @JsonManagedReference
+    @Size(min=1)
     private List<Facility> facilities;
+
+    @NotNull
     private Address address;
+
     private final Instant createAt = Instant.now();
 
     @Column(name="modified_at")
@@ -38,13 +55,12 @@ public class Park {
 
 
     @PrePersist
-    public void init(){
+    public void onSave(){
         id = UUID.randomUUID().toString();
-        modifiedAt = Instant.now();
     }
 
     @PreUpdate
-    public void doBeforeUpdating(){
+    public void onUpdate(){
         modifiedAt=Instant.now();
     }
 

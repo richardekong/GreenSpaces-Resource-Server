@@ -4,12 +4,18 @@ package com.daveace.greenspaces.address;
 import com.daveace.greenspaces.location.Location;
 import com.fasterxml.jackson.annotation.JsonManagedReference;
 import jakarta.persistence.*;
+import jakarta.validation.constraints.NotBlank;
+import jakarta.validation.constraints.Pattern;
 import lombok.*;
 import lombok.experimental.Accessors;
 
 import java.time.Instant;
 import java.util.Objects;
 import java.util.UUID;
+
+import static com.daveace.greenspaces.util.Constant.*;
+import static com.daveace.greenspaces.util.Regexp.LETTER_REGEX;
+import static com.daveace.greenspaces.util.Regexp.POSTCODE_REGEX;
 
 @NoArgsConstructor
 @AllArgsConstructor
@@ -24,9 +30,18 @@ public class Address {
     @Id
     private String id;
 
+    @NotBlank
     private String description;
+
+    @Pattern(regexp = POSTCODE_REGEX, message = INVALID_POSTCODE)
+    @NotBlank
     private String postcode;
+
+    @Pattern(regexp = LETTER_REGEX, message = INVALID_CITY)
+    @NotBlank
     private String city;
+
+    @Pattern(regexp = LETTER_REGEX, message = INVALID_COUNTRY)
     private String country;
 
     @OneToOne(cascade = CascadeType.ALL)
@@ -37,13 +52,12 @@ public class Address {
     private Instant modifiedAt;
 
     @PrePersist
-    public void doBeforeSaving() {
+    public void onSave() {
         id = UUID.randomUUID().toString();
-        modifiedAt = Instant.now();
     }
 
     @PreUpdate
-    public void doBeforeUpdating(){
+    public void onUpdate() {
         modifiedAt = Instant.now();
     }
 
