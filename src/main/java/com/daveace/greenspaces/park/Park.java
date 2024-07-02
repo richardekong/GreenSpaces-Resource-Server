@@ -13,6 +13,8 @@ import java.util.UUID;
 @Accessors(chain = true)
 @Getter
 @Setter
+@Entity
+@Table(name="parks")
 public class Park {
 
     @Id
